@@ -37,11 +37,11 @@ method:
     ;
 
 connection_left:
-    instance=ident ('"' attrib=ident mult=multiplicity? '"')?
+    instance=ident ('"' cardinality=connection_cardinality? '"')?
     ;
 
 connection_right:
-    ('"' attrib=ident mult=multiplicity? '"')? instance=ident
+    ('"' cardinality=connection_cardinality '"')? instance=ident
     ;
 
 connection:
@@ -52,7 +52,7 @@ connection:
     NEWLINE
     ;
 
-multiplicity: ('*' | '0..1' '0..*' | '1..*' | '1');
+connection_cardinality: ('*' | 'many' | '0..1' '0..*' | '1..*' | '1');
 
 visibility:
     '+'     # visibility_public
