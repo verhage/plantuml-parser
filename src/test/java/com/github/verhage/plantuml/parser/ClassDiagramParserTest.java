@@ -19,17 +19,22 @@ import static java.nio.charset.StandardCharsets.UTF_8;
 public class ClassDiagramParserTest {
     @Test
     public void testParseClassDiagrams() {
-        Arrays.stream(ClassDiagram.values()).forEach(this::parseClassDiagram);
+        int parseErrors = 0;
+        for (ClassDiagram classDiagram : ClassDiagram.values()) {
+            parseErrors += parseClassDiagram(classDiagram);
+        }
+
+        Assertions.assertEquals(0, parseErrors);
     }
 
-    private void parseClassDiagram(ClassDiagram classDiagram) {
+    private int parseClassDiagram(ClassDiagram classDiagram) {
         System.out.println("Parsing " + classDiagram.getPath());
         ClassDiagramLexer lexer = new ClassDiagramLexer(CharStreams.fromString(loadPuml(classDiagram)));
         CommonTokenStream tokens = new CommonTokenStream(lexer);
         ClassDiagramParser parser = new ClassDiagramParser(tokens);
         parser.uml();
 
-        Assertions.assertEquals(0, parser.getNumberOfSyntaxErrors());
+        return parser.getNumberOfSyntaxErrors();
     }
 
     private String loadPuml(ClassDiagram classDiagram) {
